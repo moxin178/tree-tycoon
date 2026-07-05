@@ -20,16 +20,20 @@ export function loadGame() {
   }
   try {
     const data = JSON.parse(saved);
-    if (typeof data.saveVersion !== 'number') {
+    if (data.saveVersion !== SAVE_VERSION) {
       return createGameState();
     }
+
     const defaultState = createGameState();
+    const allowedKeys = Object.keys(defaultState);
     const merged = { ...defaultState };
-    for (const key in data) {
-      if (data[key] !== undefined) {
+
+    for (const key of allowedKeys) {
+      if (key in data && data[key] !== undefined) {
         merged[key] = data[key];
       }
     }
+
     return merged;
   } catch (error) {
     console.warn('存档解析失败，使用默认状态', error);
