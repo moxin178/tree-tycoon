@@ -1,5 +1,5 @@
 import { createGameState } from '../js/gameState.js';
-import { sellWood, upgradeAxe } from '../js/upgrades.js';
+import { sellWood, upgradeAxe, buyLumberjack, upgradeLumberjack, upgradeBackpack } from '../js/upgrades.js';
 
 describe('upgrades', () => {
   let state;
@@ -68,5 +68,83 @@ describe('upgrades', () => {
       expect(state.axeLevel).toBe(1);
       expect(state.gold).toBe(4);
     });
+  });
+});
+
+describe('lumberjack', () => {
+  let state;
+
+  beforeEach(() => {
+    state = createGameState();
+  });
+
+  test('buyLumberjack enables lumberjack and costs gold', () => {
+    state.gold = 50;
+    const result = buyLumberjack(state);
+    expect(result.success).toBe(true);
+    expect(state.lumberjackLevel).toBe(1);
+    expect(state.gold).toBe(0);
+  });
+
+  test('buyLumberjack fails if already owned', () => {
+    state.gold = 100;
+    buyLumberjack(state);
+    const result = buyLumberjack(state);
+    expect(result.success).toBe(false);
+    expect(result.reason).toBe('已拥有自动伐木机');
+  });
+
+  test('buyLumberjack fails if not enough gold', () => {
+    state.gold = 10;
+    const result = buyLumberjack(state);
+    expect(result.success).toBe(false);
+    expect(result.reason).toBe('金币不足');
+  });
+
+  test('upgradeLumberjack increases level and cost', () => {
+    state.gold = 100;
+    buyLumberjack(state);
+    const result = upgradeLumberjack(state);
+    expect(result.success).toBe(true);
+    expect(state.lumberjackLevel).toBe(2);
+    expect(state.lumberjackUpgradeCost).toBe(75); // 50 * 1.5
+  });
+
+  test('upgradeLumberjack fails if not owned', () => {
+    state.gold = 100;
+    const result = upgradeLumberjack(state);
+    expect(result.success).toBe(false);
+    expect(result.reason).toBe('未拥有自动伐木机');
+  });
+
+  test('upgradeLumberjack fails if not enough gold', () => {
+    state.gold = 50;
+    buyLumberjack(state);
+    const result = upgradeLumberjack(state);
+    expect(result.success).toBe(false);
+    expect(result.reason).toBe('金币不足');
+  });
+});
+
+describe('backpack', () => {
+  let state;
+
+  beforeEach(() => {
+    state = createGameState();
+  });
+
+  test('upgradeBackpack increases capacity and cost', () => {
+    state.gold = 30;
+    const result = upgradeBackpack(state);
+    expect(result.success).toBe(true);
+    expect(state.backpackCapacity).toBe(20);
+    expect(state.backpackUpgradeCost).toBe(48); // 30 * 1.6
+  });
+
+  test('upgradeBackpack fails if not enough gold', () => {
+    state.gold = 10;
+    const result = upgradeBackpack(state);
+    expect(result.success).toBe(false);
+    expect(result.reason).toBe('金币不足');
   });
 });
