@@ -5,12 +5,16 @@ export const SAVE_KEY = 'treeTycoonSave';
 export { SAVE_VERSION };
 
 export function saveGame(state) {
-  const data = {
-    ...state,
-    lastSaveTime: Date.now(),
-    saveVersion: SAVE_VERSION,
-  };
-  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  try {
+    const data = {
+      ...state,
+      lastSaveTime: Date.now(),
+      saveVersion: SAVE_VERSION,
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.warn('存档保存失败', error);
+  }
 }
 
 export function loadGame() {
