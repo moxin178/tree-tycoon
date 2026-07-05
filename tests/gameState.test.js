@@ -7,9 +7,12 @@ describe('gameState', () => {
     state = createGameState();
   });
 
-  test('createGameState returns initial state with economy fields', () => {
+  test('createGameState returns initial state', () => {
+    const state = createGameState();
     expect(state.gold).toBe(0);
     expect(state.wood).toBe(0);
+    expect(state.planks).toBe(0);
+    expect(state.furniture).toBe(0);
     expect(state.axeLevel).toBe(1);
     expect(state.woodPrice).toBe(2);
     expect(state.axeUpgradeCost).toBe(5);
@@ -18,8 +21,18 @@ describe('gameState', () => {
     expect(state.lumberjackUpgradeCost).toBe(50);
     expect(state.backpackCapacity).toBe(10);
     expect(state.backpackUpgradeCost).toBe(30);
+    expect(state.sawmillLevel).toBe(0);
+    expect(state.sawmillBaseRate).toBe(1);
+    expect(state.sawmillUpgradeCost).toBe(100);
+    expect(state.furnitureFactoryLevel).toBe(0);
+    expect(state.furnitureFactoryBaseRate).toBe(1);
+    expect(state.furnitureFactoryUpgradeCost).toBe(500);
+    expect(state.maxWood).toBe(10);
+    expect(state.maxPlanks).toBe(10);
+    expect(state.maxFurniture).toBe(10);
+    expect(state.storageUpgradeCost).toBe(50);
     expect(state.lastSaveTime).toBeDefined();
-    expect(state.saveVersion).toBe(2);
+    expect(state.saveVersion).toBe(3);
   });
 
   test('addWood increases wood count', () => {

@@ -18,6 +18,25 @@ export function createGameState() {
     lumberjackUpgradeCost: 50,
     backpackCapacity: 10,
     backpackUpgradeCost: 30,
+
+    // 加工链资源
+    planks: 0,
+    furniture: 0,
+
+    // 建筑
+    sawmillLevel: 0,
+    sawmillBaseRate: 1,
+    sawmillUpgradeCost: 100,
+    furnitureFactoryLevel: 0,
+    furnitureFactoryBaseRate: 1,
+    furnitureFactoryUpgradeCost: 500,
+
+    // 库存上限
+    maxWood: 10,
+    maxPlanks: 10,
+    maxFurniture: 10,
+    storageUpgradeCost: 50,
+
     lastSaveTime: Date.now(),
     saveVersion: SAVE_VERSION,
   };
