@@ -1,24 +1,43 @@
-const { createGameState, addWood, addGold, getState } = require('../js/gameState');
+const { createGameState, addWood, addGold } = require('../js/gameState');
 
 describe('gameState', () => {
+  let state;
+
+  beforeEach(() => {
+    state = createGameState();
+  });
+
   test('createGameState returns initial state', () => {
-    const state = createGameState();
     expect(state.gold).toBe(0);
     expect(state.wood).toBe(0);
     expect(state.axeLevel).toBe(1);
     expect(state.woodPrice).toBe(2);
     expect(state.axeUpgradeCost).toBe(10);
+    expect(state.lastSaveTime).toBeDefined();
   });
 
   test('addWood increases wood count', () => {
-    const state = createGameState();
     addWood(state, 5);
     expect(state.wood).toBe(5);
   });
 
   test('addGold increases gold count', () => {
-    const state = createGameState();
     addGold(state, 10);
     expect(state.gold).toBe(10);
+  });
+
+  test('addWood throws on negative amount', () => {
+    expect(() => addWood(state, -1)).toThrow('Amount must be a non-negative number');
+  });
+
+  test('addGold throws on negative amount', () => {
+    expect(() => addGold(state, -1)).toThrow('Amount must be a non-negative number');
+  });
+
+  test('state instances are independent', () => {
+    const state1 = createGameState();
+    const state2 = createGameState();
+    addWood(state1, 5);
+    expect(state2.wood).toBe(0);
   });
 });

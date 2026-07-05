@@ -10,20 +10,21 @@ function createGameState() {
 }
 
 function addWood(state, amount) {
+  if (typeof amount !== 'number' || amount < 0 || !Number.isFinite(amount)) {
+    throw new Error('Amount must be a non-negative number');
+  }
   state.wood += amount;
 }
 
 function addGold(state, amount) {
+  if (typeof amount !== 'number' || amount < 0 || !Number.isFinite(amount)) {
+    throw new Error('Amount must be a non-negative number');
+  }
   state.gold += amount;
-}
-
-function getState(state) {
-  return state;
 }
 
 module.exports = {
   createGameState,
   addWood,
   addGold,
-  getState,
 };
