@@ -48,4 +48,22 @@ describe('production', () => {
     processProduction(state);
     expect(state.wood).toBe(0);
   });
+
+  test('auto-sells when wood exactly equals backpack capacity', () => {
+    state.axeLevel = 2;
+    state.lumberjackLevel = 1;
+    state.backpackCapacity = 10;
+    state.wood = 8;
+    processProduction(state);
+    expect(state.wood).toBe(0);
+    expect(state.gold).toBe(20); // 10 * 2
+  });
+
+  test('applies lumberjackBaseRate multiplier', () => {
+    state.axeLevel = 2;
+    state.lumberjackLevel = 1;
+    state.lumberjackBaseRate = 3;
+    processProduction(state);
+    expect(state.wood).toBe(6); // 2 * 1 * 3
+  });
 });
