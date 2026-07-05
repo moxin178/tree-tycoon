@@ -1,30 +1,23 @@
 const MAX_FLOATING_TEXTS = 10;
 
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.textContent = value;
+  }
+}
+
 export function updateUI(state) {
-  document.getElementById('gold-display').textContent = formatNumber(state.gold);
-  document.getElementById('wood-display').textContent = formatNumber(state.wood);
-  document.getElementById('axe-display').textContent = state.axeLevel;
-  document.getElementById('upgrade-cost').textContent = formatNumber(state.axeUpgradeCost);
+  setText('gold-display', formatNumber(state.gold));
+  setText('wood-display', formatNumber(state.wood));
+  setText('axe-display', state.axeLevel);
+  setText('upgrade-cost', formatNumber(state.axeUpgradeCost));
 
-  const lumberjackDisplay = document.getElementById('lumberjack-display');
-  if (lumberjackDisplay) {
-    lumberjackDisplay.textContent = state.lumberjackLevel > 0 ? state.lumberjackLevel : '未购买';
-  }
+  setText('lumberjack-display', state.lumberjackLevel > 0 ? state.lumberjackLevel : '未购买');
+  setText('backpack-display', state.backpackCapacity);
 
-  const backpackDisplay = document.getElementById('backpack-display');
-  if (backpackDisplay) {
-    backpackDisplay.textContent = state.backpackCapacity;
-  }
-
-  const backpackCostDisplay = document.getElementById('backpack-cost');
-  if (backpackCostDisplay) {
-    backpackCostDisplay.textContent = formatNumber(state.backpackUpgradeCost);
-  }
-
-  const lumberjackCostDisplay = document.getElementById('lumberjack-cost');
-  if (lumberjackCostDisplay) {
-    lumberjackCostDisplay.textContent = formatNumber(state.lumberjackUpgradeCost);
-  }
+  setText('backpack-cost', formatNumber(state.backpackUpgradeCost));
+  setText('lumberjack-cost', formatNumber(state.lumberjackUpgradeCost));
 
   const upgradeBtn = document.getElementById('upgrade-btn');
   if (upgradeBtn) {
@@ -35,7 +28,7 @@ export function updateUI(state) {
   if (buyLumberjackBtn) {
     buyLumberjackBtn.disabled = state.gold < state.lumberjackUpgradeCost;
     const label = state.lumberjackLevel > 0 ? '升级自动伐木机' : '购买自动伐木机';
-    buyLumberjackBtn.childNodes[0].textContent = `${label} (`;
+    buyLumberjackBtn.innerHTML = `${label} (<span id="lumberjack-cost">${formatNumber(state.lumberjackUpgradeCost)}</span> 金币)`;
   }
 
   const upgradeBackpackBtn = document.getElementById('upgrade-backpack-btn');
@@ -76,5 +69,8 @@ function cleanupOldFloatingTexts() {
 }
 
 function formatNumber(num) {
+  if (typeof num !== 'number' || !Number.isFinite(num)) {
+    return '0';
+  }
   return num.toLocaleString('zh-CN');
 }
