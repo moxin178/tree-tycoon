@@ -27,6 +27,10 @@ function triggerChop(event) {
   void tree.offsetWidth; // 强制重绘
   tree.classList.add('shake');
 
+  tree.addEventListener('animationend', () => {
+    tree.classList.remove('shake');
+  }, { once: true });
+
   const rect = tree.getBoundingClientRect();
   const x = event ? event.clientX : rect.left + rect.width / 2;
   const y = event ? event.clientY : rect.top;

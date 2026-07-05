@@ -1,3 +1,5 @@
+const MAX_FLOATING_TEXTS = 10;
+
 export function updateUI(state) {
   document.getElementById('gold-display').textContent = formatNumber(state.gold);
   document.getElementById('wood-display').textContent = formatNumber(state.wood);
@@ -17,15 +19,25 @@ export function showMessage(text) {
 }
 
 export function showFloatingText(text, x, y) {
+  cleanupOldFloatingTexts();
+
   const el = document.createElement('div');
   el.className = 'floating-text';
   el.textContent = text;
   el.style.left = `${x}px`;
   el.style.top = `${y}px`;
   document.body.appendChild(el);
-  setTimeout(() => {
+
+  el.addEventListener('animationend', () => {
     el.remove();
-  }, 1000);
+  }, { once: true });
+}
+
+function cleanupOldFloatingTexts() {
+  const texts = document.querySelectorAll('.floating-text');
+  if (texts.length >= MAX_FLOATING_TEXTS) {
+    texts[0].remove();
+  }
 }
 
 function formatNumber(num) {
