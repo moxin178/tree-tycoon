@@ -33,8 +33,8 @@ function triggerChop(event) {
   }, { once: true });
 
   const rect = tree.getBoundingClientRect();
-  const x = event ? event.clientX : rect.left + rect.width / 2;
-  const y = event ? event.clientY : rect.top;
+  const x = event != null ? event.clientX : rect.left + rect.width / 2;
+  const y = event != null ? event.clientY : rect.top;
   showFloatingText(`+${amount} 原木`, x, y);
 }
 
@@ -94,6 +94,7 @@ document.getElementById('upgrade-backpack-btn').addEventListener('click', () => 
 setInterval(() => {
   processProduction(state);
   updateUI(state);
+  saveGame(state);
 }, 1000);
 
 // 自动保存
