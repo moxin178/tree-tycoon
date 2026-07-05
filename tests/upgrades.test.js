@@ -40,10 +40,6 @@ describe('upgrades', () => {
   });
 
   describe('upgradeAxe', () => {
-    beforeEach(() => {
-      state = createGameState();
-    });
-
     test('upgradeAxe increases axe level and costs gold', () => {
       state.gold = 20;
       const result = upgradeAxe(state);
@@ -139,6 +135,15 @@ describe('backpack', () => {
     expect(result.success).toBe(true);
     expect(state.backpackCapacity).toBe(20);
     expect(state.backpackUpgradeCost).toBe(48); // 30 * 1.6
+  });
+
+  test('upgradeBackpack increases cost on second upgrade', () => {
+    state.gold = 100;
+    upgradeBackpack(state); // 30 -> 48, capacity 20
+    upgradeBackpack(state); // 48 -> 76, capacity 30
+    expect(state.backpackCapacity).toBe(30);
+    expect(state.backpackUpgradeCost).toBe(76);
+    expect(state.gold).toBe(22); // 100 - 30 - 48
   });
 
   test('upgradeBackpack fails if not enough gold', () => {

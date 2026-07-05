@@ -1,6 +1,8 @@
 export function sellWood(state) {
-  const woodToSell = Math.max(0, state.wood);
-  const earnings = woodToSell * state.woodPrice;
+  if (state.wood < 0) {
+    state.wood = 0;
+  }
+  const earnings = state.wood * state.woodPrice;
   state.gold += earnings;
   state.wood = 0;
   return earnings;
