@@ -6,12 +6,47 @@ export function updateUI(state) {
   document.getElementById('axe-display').textContent = state.axeLevel;
   document.getElementById('upgrade-cost').textContent = formatNumber(state.axeUpgradeCost);
 
+  const lumberjackDisplay = document.getElementById('lumberjack-display');
+  if (lumberjackDisplay) {
+    lumberjackDisplay.textContent = state.lumberjackLevel > 0 ? state.lumberjackLevel : '未购买';
+  }
+
+  const backpackDisplay = document.getElementById('backpack-display');
+  if (backpackDisplay) {
+    backpackDisplay.textContent = state.backpackCapacity;
+  }
+
+  const backpackCostDisplay = document.getElementById('backpack-cost');
+  if (backpackCostDisplay) {
+    backpackCostDisplay.textContent = formatNumber(state.backpackUpgradeCost);
+  }
+
+  const lumberjackCostDisplay = document.getElementById('lumberjack-cost');
+  if (lumberjackCostDisplay) {
+    lumberjackCostDisplay.textContent = formatNumber(state.lumberjackUpgradeCost);
+  }
+
   const upgradeBtn = document.getElementById('upgrade-btn');
-  upgradeBtn.disabled = state.gold < state.axeUpgradeCost;
+  if (upgradeBtn) {
+    upgradeBtn.disabled = state.gold < state.axeUpgradeCost;
+  }
+
+  const buyLumberjackBtn = document.getElementById('buy-lumberjack-btn');
+  if (buyLumberjackBtn) {
+    buyLumberjackBtn.disabled = state.gold < state.lumberjackUpgradeCost;
+    const label = state.lumberjackLevel > 0 ? '升级自动伐木机' : '购买自动伐木机';
+    buyLumberjackBtn.childNodes[0].textContent = `${label} (`;
+  }
+
+  const upgradeBackpackBtn = document.getElementById('upgrade-backpack-btn');
+  if (upgradeBackpackBtn) {
+    upgradeBackpackBtn.disabled = state.gold < state.backpackUpgradeCost;
+  }
 }
 
 export function showMessage(text) {
   const el = document.getElementById('message');
+  if (!el) return;
   el.textContent = text;
   setTimeout(() => {
     el.textContent = '';
