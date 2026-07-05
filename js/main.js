@@ -1,6 +1,19 @@
 import { loadGame, saveGame } from './saveLoad.js';
 import { chopWood } from './clicker.js';
-import { sellWood, upgradeAxe, buyLumberjack, upgradeLumberjack, upgradeBackpack } from './upgrades.js';
+import {
+  sellWood,
+  sellPlanks,
+  sellFurniture,
+  upgradeAxe,
+  buyLumberjack,
+  upgradeLumberjack,
+  upgradeBackpack,
+  buySawmill,
+  upgradeSawmill,
+  buyFurnitureFactory,
+  upgradeFurnitureFactory,
+  upgradeStorage,
+} from './upgrades.js';
 import { calculateOfflineReward } from './offlineCalc.js';
 import { processProduction } from './production.js';
 import { updateUI, showMessage, showFloatingText } from './ui.js';
@@ -83,6 +96,69 @@ document.getElementById('upgrade-backpack-btn').addEventListener('click', () => 
   const result = upgradeBackpack(state);
   if (result.success) {
     showMessage(`背包容量提升到 ${state.backpackCapacity}`);
+    saveGame(state);
+  } else {
+    showMessage(result.reason);
+  }
+  updateUI(state);
+});
+
+document.getElementById('sell-planks-btn').addEventListener('click', () => {
+  if (state.planks === 0) {
+    showMessage('没有木板可出售');
+    return;
+  }
+  const earnings = sellPlanks(state);
+  showMessage(`出售木板，获得 ${earnings} 金币`);
+  updateUI(state);
+  saveGame(state);
+});
+
+document.getElementById('sell-furniture-btn').addEventListener('click', () => {
+  if (state.furniture === 0) {
+    showMessage('没有家具可出售');
+    return;
+  }
+  const earnings = sellFurniture(state);
+  showMessage(`出售家具，获得 ${earnings} 金币`);
+  updateUI(state);
+  saveGame(state);
+});
+
+document.getElementById('buy-sawmill-btn').addEventListener('click', () => {
+  const isOwned = state.sawmillLevel > 0;
+  const result = isOwned ? upgradeSawmill(state) : buySawmill(state);
+  if (result.success) {
+    const message = isOwned
+      ? `锯木厂升级到等级 ${state.sawmillLevel}`
+      : '建造锯木厂成功';
+    showMessage(message);
+    saveGame(state);
+  } else {
+    showMessage(result.reason);
+  }
+  updateUI(state);
+});
+
+document.getElementById('buy-furniture-factory-btn').addEventListener('click', () => {
+  const isOwned = state.furnitureFactoryLevel > 0;
+  const result = isOwned ? upgradeFurnitureFactory(state) : buyFurnitureFactory(state);
+  if (result.success) {
+    const message = isOwned
+      ? `家具厂升级到等级 ${state.furnitureFactoryLevel}`
+      : '建造家具厂成功';
+    showMessage(message);
+    saveGame(state);
+  } else {
+    showMessage(result.reason);
+  }
+  updateUI(state);
+});
+
+document.getElementById('upgrade-storage-btn').addEventListener('click', () => {
+  const result = upgradeStorage(state);
+  if (result.success) {
+    showMessage(`库存上限提升到 ${state.maxWood}/${state.maxPlanks}/${state.maxFurniture}`);
     saveGame(state);
   } else {
     showMessage(result.reason);
