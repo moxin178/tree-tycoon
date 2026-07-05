@@ -9,17 +9,19 @@ function createGameState() {
   };
 }
 
-function addWood(state, amount) {
+function validateAmount(amount) {
   if (typeof amount !== 'number' || amount < 0 || !Number.isFinite(amount)) {
     throw new Error('Amount must be a non-negative number');
   }
+}
+
+function addWood(state, amount) {
+  validateAmount(amount);
   state.wood += amount;
 }
 
 function addGold(state, amount) {
-  if (typeof amount !== 'number' || amount < 0 || !Number.isFinite(amount)) {
-    throw new Error('Amount must be a non-negative number');
-  }
+  validateAmount(amount);
   state.gold += amount;
 }
 

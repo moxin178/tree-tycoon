@@ -34,6 +34,41 @@ describe('gameState', () => {
     expect(() => addGold(state, -1)).toThrow('Amount must be a non-negative number');
   });
 
+  test('addWood allows zero amount', () => {
+    addWood(state, 0);
+    expect(state.wood).toBe(0);
+  });
+
+  test('addGold allows zero amount', () => {
+    addGold(state, 0);
+    expect(state.gold).toBe(0);
+  });
+
+  test('addWood throws on NaN', () => {
+    expect(() => addWood(state, NaN)).toThrow('Amount must be a non-negative number');
+  });
+
+  test('addGold throws on NaN', () => {
+    expect(() => addGold(state, NaN)).toThrow('Amount must be a non-negative number');
+  });
+
+  test('addWood throws on Infinity', () => {
+    expect(() => addWood(state, Infinity)).toThrow('Amount must be a non-negative number');
+  });
+
+  test('addGold throws on string', () => {
+    expect(() => addGold(state, '10')).toThrow('Amount must be a non-negative number');
+  });
+
+  test('lastSaveTime is a recent timestamp', () => {
+    const before = Date.now();
+    const newState = createGameState();
+    const after = Date.now();
+    expect(typeof newState.lastSaveTime).toBe('number');
+    expect(newState.lastSaveTime).toBeGreaterThanOrEqual(before);
+    expect(newState.lastSaveTime).toBeLessThanOrEqual(after);
+  });
+
   test('state instances are independent', () => {
     const state1 = createGameState();
     const state2 = createGameState();
