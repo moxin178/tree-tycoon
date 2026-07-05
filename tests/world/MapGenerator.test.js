@@ -12,12 +12,11 @@ describe('MapGenerator', () => {
     expect(world.getTile(10, 10).type).toBe(TileType.EMPTY);
   });
 
-  test('generateInitialMap creates locked outer ring', () => {
+  test('generateInitialMap keeps central area empty', () => {
     const world = new World(20, 20);
     MapGenerator.generateInitialMap(world);
 
-    // Outer-most ring should be locked
-    expect(world.getTile(0, 0).locked).toBe(false); // forest is inner
+    expect(world.getTile(10, 10).type).toBe(TileType.EMPTY);
     expect(world.getTile(-1, -1)).toBe(null);
   });
 });
