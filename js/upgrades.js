@@ -6,4 +6,14 @@ function sellWood(state) {
   return earnings;
 }
 
-module.exports = { sellWood };
+function upgradeAxe(state) {
+  if (state.gold < state.axeUpgradeCost) {
+    return { success: false, reason: '金币不足' };
+  }
+  state.gold -= state.axeUpgradeCost;
+  state.axeLevel += 1;
+  state.axeUpgradeCost = Math.floor(state.axeUpgradeCost * 1.5);
+  return { success: true };
+}
+
+module.exports = { sellWood, upgradeAxe };

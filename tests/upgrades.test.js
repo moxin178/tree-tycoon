@@ -1,5 +1,5 @@
 const { createGameState } = require('../js/gameState');
-const { sellWood } = require('../js/upgrades');
+const { sellWood, upgradeAxe } = require('../js/upgrades');
 
 describe('upgrades', () => {
   let state;
@@ -37,5 +37,36 @@ describe('upgrades', () => {
     expect(state.gold).toBe(0);
     expect(state.wood).toBe(0);
     expect(earnings).toBe(0);
+  });
+
+  describe('upgradeAxe', () => {
+    beforeEach(() => {
+      state = createGameState();
+    });
+
+    test('upgradeAxe increases axe level and costs gold', () => {
+      state.gold = 20;
+      const result = upgradeAxe(state);
+      expect(result.success).toBe(true);
+      expect(state.axeLevel).toBe(2);
+      expect(state.gold).toBe(10);
+    });
+
+    test('upgradeAxe increases cost after upgrade', () => {
+      state.gold = 100;
+      upgradeAxe(state);
+      expect(state.axeUpgradeCost).toBe(15); // 10 * 1.5 = 15
+      upgradeAxe(state);
+      expect(state.axeUpgradeCost).toBe(22); // 15 * 1.5 = 22.5, floor = 22
+    });
+
+    test('upgradeAxe fails if not enough gold', () => {
+      state.gold = 5;
+      const result = upgradeAxe(state);
+      expect(result.success).toBe(false);
+      expect(result.reason).toBe('金币不足');
+      expect(state.axeLevel).toBe(1);
+      expect(state.gold).toBe(5);
+    });
   });
 });
