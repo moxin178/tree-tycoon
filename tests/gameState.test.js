@@ -19,7 +19,7 @@ describe('gameState', () => {
     expect(state.backpackCapacity).toBe(10);
     expect(state.backpackUpgradeCost).toBe(30);
     expect(state.lastSaveTime).toBeDefined();
-    expect(state.saveVersion).toBe(1);
+    expect(state.saveVersion).toBe(2);
   });
 
   test('addWood increases wood count', () => {
