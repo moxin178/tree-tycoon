@@ -1,7 +1,8 @@
 import { createGameState } from './gameState.js';
+import { SAVE_VERSION } from './constants.js';
 
 export const SAVE_KEY = 'treeTycoonSave';
-export const SAVE_VERSION = 1;
+export { SAVE_VERSION };
 
 export function saveGame(state) {
   const data = {

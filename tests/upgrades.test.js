@@ -49,24 +49,24 @@ describe('upgrades', () => {
       const result = upgradeAxe(state);
       expect(result.success).toBe(true);
       expect(state.axeLevel).toBe(2);
-      expect(state.gold).toBe(10);
+      expect(state.gold).toBe(15);
     });
 
     test('upgradeAxe increases cost after upgrade', () => {
       state.gold = 100;
       upgradeAxe(state);
-      expect(state.axeUpgradeCost).toBe(15); // 10 * 1.5 = 15
+      expect(state.axeUpgradeCost).toBe(7); // 5 * 1.5 = 7.5, floor = 7
       upgradeAxe(state);
-      expect(state.axeUpgradeCost).toBe(22); // 15 * 1.5 = 22.5, floor = 22
+      expect(state.axeUpgradeCost).toBe(10); // 7 * 1.5 = 10.5, floor = 10
     });
 
     test('upgradeAxe fails if not enough gold', () => {
-      state.gold = 5;
+      state.gold = 4;
       const result = upgradeAxe(state);
       expect(result.success).toBe(false);
       expect(result.reason).toBe('金币不足');
       expect(state.axeLevel).toBe(1);
-      expect(state.gold).toBe(5);
+      expect(state.gold).toBe(4);
     });
   });
 });

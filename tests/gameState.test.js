@@ -7,13 +7,19 @@ describe('gameState', () => {
     state = createGameState();
   });
 
-  test('createGameState returns initial state', () => {
+  test('createGameState returns initial state with economy fields', () => {
     expect(state.gold).toBe(0);
     expect(state.wood).toBe(0);
     expect(state.axeLevel).toBe(1);
     expect(state.woodPrice).toBe(2);
-    expect(state.axeUpgradeCost).toBe(10);
+    expect(state.axeUpgradeCost).toBe(5);
+    expect(state.lumberjackLevel).toBe(0);
+    expect(state.lumberjackBaseRate).toBe(1);
+    expect(state.lumberjackUpgradeCost).toBe(50);
+    expect(state.backpackCapacity).toBe(10);
+    expect(state.backpackUpgradeCost).toBe(30);
     expect(state.lastSaveTime).toBeDefined();
+    expect(state.saveVersion).toBe(1);
   });
 
   test('addWood increases wood count', () => {
