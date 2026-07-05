@@ -1,5 +1,5 @@
-const { createGameState } = require('../js/gameState');
-const { sellWood, upgradeAxe } = require('../js/upgrades');
+import { createGameState } from '../js/gameState.js';
+import { sellWood, upgradeAxe } from '../js/upgrades.js';
 
 describe('upgrades', () => {
   let state;

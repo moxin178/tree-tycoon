@@ -1,5 +1,5 @@
-const { createGameState } = require('../js/gameState');
-const { chopWood } = require('../js/clicker');
+import { createGameState } from '../js/gameState.js';
+import { chopWood } from '../js/clicker.js';
 
 describe('clicker', () => {
   let state;

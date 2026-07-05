@@ -1,5 +1,3 @@
-function chopWood(state) {
+export function chopWood(state) {
   state.wood += state.axeLevel;
 }
-
-module.exports = { chopWood };

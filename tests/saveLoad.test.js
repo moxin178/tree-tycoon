@@ -1,5 +1,5 @@
-const { createGameState, addGold } = require('../js/gameState');
-const { saveGame, loadGame, SAVE_VERSION } = require('../js/saveLoad');
+import { createGameState, addGold } from '../js/gameState.js';
+import { saveGame, loadGame, SAVE_VERSION } from '../js/saveLoad.js';
 
 // 模拟 localStorage
 const mockStorage = {};

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>从砍树开始</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="game-container">
+    <header>
+      <h1>🌲 从砍树开始</h1>
+      <p>从一把斧头开始，打造你的商业帝国</p>
+    </header>
+
+    <section class="stats">
+      <div class="stat">
+        <span class="label">💰 金币</span>
+        <span id="gold-display">0</span>
+      </div>
+      <div class="stat">
+        <span class="label">🪵 原木</span>
+        <span id="wood-display">0</span>
+      </div>
+      <div class="stat">
+        <span class="label">🪓 斧头等级</span>
+        <span id="axe-display">1</span>
+      </div>
+    </section>
+
+    <section class="game-area">
+      <div class="tree" id="tree">🌲</div>
+      <button id="chop-btn" class="big-btn">砍树</button>
+    </section>
+
+    <section class="actions">
+      <button id="sell-btn" class="action-btn">出售原木</button>
+      <button id="upgrade-btn" class="action-btn">升级斧头 (<span id="upgrade-cost">10</span> 金币)</button>
+    </section>
+
+    <section class="message" id="message"></section>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

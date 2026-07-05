@@ -1,5 +1,5 @@
-const { createGameState } = require('../js/gameState');
-const { calculateOfflineReward, MAX_OFFLINE_SECONDS } = require('../js/offlineCalc');
+import { createGameState } from '../js/gameState.js';
+import { calculateOfflineReward, MAX_OFFLINE_SECONDS } from '../js/offlineCalc.js';
 
 describe('offlineCalc', () => {
   let state;

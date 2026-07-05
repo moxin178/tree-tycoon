@@ -1,4 +1,4 @@
-function createGameState() {
+export function createGameState() {
   return {
     gold: 0,
     wood: 0,
@@ -15,18 +15,12 @@ function validateAmount(amount) {
   }
 }
 
-function addWood(state, amount) {
+export function addWood(state, amount) {
   validateAmount(amount);
   state.wood += amount;
 }
 
-function addGold(state, amount) {
+export function addGold(state, amount) {
   validateAmount(amount);
   state.gold += amount;
 }
-
-module.exports = {
-  createGameState,
-  addWood,
-  addGold,
-};

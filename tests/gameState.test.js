@@ -1,4 +1,4 @@
-const { createGameState, addWood, addGold } = require('../js/gameState');
+import { createGameState, addWood, addGold } from '../js/gameState.js';
 
 describe('gameState', () => {
   let state;

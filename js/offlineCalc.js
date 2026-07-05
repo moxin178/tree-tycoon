@@ -1,6 +1,6 @@
-const MAX_OFFLINE_SECONDS = 8 * 60 * 60; // 最多 8 小时
+export const MAX_OFFLINE_SECONDS = 8 * 60 * 60;
 
-function calculateOfflineReward(state, lastSaveTime, now = Date.now()) {
+export function calculateOfflineReward(state, lastSaveTime, now = Date.now()) {
   const elapsedSeconds = Math.max(0, Math.floor((now - lastSaveTime) / 1000));
   const cappedSeconds = Math.min(elapsedSeconds, MAX_OFFLINE_SECONDS);
 
@@ -9,5 +9,3 @@ function calculateOfflineReward(state, lastSaveTime, now = Date.now()) {
 
   return { wood, elapsedSeconds, cappedSeconds };
 }
-
-module.exports = { calculateOfflineReward, MAX_OFFLINE_SECONDS };

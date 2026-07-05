@@ -1,9 +1,9 @@
-const { createGameState } = require('../js/gameState');
+import { createGameState } from './gameState.js';
 
-const SAVE_KEY = 'treeTycoonSave';
-const SAVE_VERSION = 1;
+export const SAVE_KEY = 'treeTycoonSave';
+export const SAVE_VERSION = 1;
 
-function saveGame(state) {
+export function saveGame(state) {
   const data = {
     ...state,
     lastSaveTime: Date.now(),
@@ -12,7 +12,7 @@ function saveGame(state) {
   localStorage.setItem(SAVE_KEY, JSON.stringify(data));
 }
 
-function loadGame() {
+export function loadGame() {
   const saved = localStorage.getItem(SAVE_KEY);
   if (!saved) {
     return createGameState();
@@ -31,5 +31,3 @@ function loadGame() {
     return createGameState();
   }
 }
-
-module.exports = { saveGame, loadGame, SAVE_VERSION };
