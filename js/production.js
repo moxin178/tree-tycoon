@@ -1,10 +1,17 @@
 import { sellWood } from './upgrades.js';
 
 export function processProduction(state) {
-  // 1. 自动伐木机产出原木（受上限限制）
+  // 1. 自动伐木机产出原木，超过库存上限的部分自动出售
   if (state.lumberjackLevel > 0) {
     const production = state.axeLevel * state.lumberjackLevel * state.lumberjackBaseRate;
-    state.wood = Math.min(state.maxWood, state.wood + production);
+    const newWood = state.wood + production;
+    if (newWood > state.maxWood) {
+      const overflow = newWood - state.maxWood;
+      state.gold += overflow * state.woodPrice;
+      state.wood = state.maxWood;
+    } else {
+      state.wood = newWood;
+    }
   }
 
   // 2. 锯木厂加工木板

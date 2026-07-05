@@ -70,7 +70,7 @@ describe('production', () => {
   });
 
   // 新增测试：库存限制
-  test('lumberjack production is capped by maxWood', () => {
+  test('lumberjack sells overflow wood when maxWood is reached', () => {
     state.axeLevel = 5;
     state.lumberjackLevel = 2;
     state.wood = 8;
@@ -78,6 +78,7 @@ describe('production', () => {
     state.backpackCapacity = 100; // 避免自动出售干扰
     processProduction(state);
     expect(state.wood).toBe(10); // 8 + 10 = 18, but capped at 10
+    expect(state.gold).toBe(16); // (18 - 10) * 2 = 16
   });
 
   test('sawmill production is capped by maxPlanks', () => {
@@ -160,7 +161,7 @@ describe('production', () => {
     expect(state.furniture).toBe(10);
   });
 
-  test('lumberjack stops when wood storage is full', () => {
+  test('lumberjack continues producing and sells overflow at maxWood', () => {
     state.axeLevel = 2;
     state.lumberjackLevel = 1;
     state.wood = 10;
@@ -168,5 +169,6 @@ describe('production', () => {
     state.backpackCapacity = 100; // 避免自动出售干扰
     processProduction(state);
     expect(state.wood).toBe(10);
+    expect(state.gold).toBe(4); // 2 * 2 = 4
   });
 });
