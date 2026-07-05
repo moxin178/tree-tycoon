@@ -2,7 +2,7 @@ import { loadGame, saveGame } from './saveLoad.js';
 import { chopWood } from './clicker.js';
 import { sellWood, upgradeAxe } from './upgrades.js';
 import { calculateOfflineReward } from './offlineCalc.js';
-import { updateUI, showMessage } from './ui.js';
+import { updateUI, showMessage, showFloatingText } from './ui.js';
 
 let state = loadGame();
 
@@ -17,16 +17,25 @@ if (state.lastSaveTime) {
 
 updateUI(state);
 
-// 绑定事件
-document.getElementById('chop-btn').addEventListener('click', () => {
+function triggerChop(event) {
+  const amount = state.axeLevel;
   chopWood(state);
   updateUI(state);
-});
 
-document.getElementById('tree').addEventListener('click', () => {
-  chopWood(state);
-  updateUI(state);
-});
+  const tree = document.getElementById('tree');
+  tree.classList.remove('shake');
+  void tree.offsetWidth; // 强制重绘
+  tree.classList.add('shake');
+
+  const rect = tree.getBoundingClientRect();
+  const x = event ? event.clientX : rect.left + rect.width / 2;
+  const y = event ? event.clientY : rect.top;
+  showFloatingText(`+${amount} 原木`, x, y);
+}
+
+// 绑定事件
+document.getElementById('chop-btn').addEventListener('click', (e) => triggerChop(e));
+document.getElementById('tree').addEventListener('click', (e) => triggerChop(e));
 
 document.getElementById('sell-btn').addEventListener('click', () => {
   if (state.wood === 0) {

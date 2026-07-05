@@ -128,3 +128,51 @@ header p {
   color: #666;
   font-size: 14px;
 }
+
+.tree-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tree {
+  font-size: 120px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: transform 0.1s;
+  user-select: none;
+}
+
+.tree:active {
+  transform: scale(0.95);
+}
+
+.tree.shake {
+  animation: shake 0.2s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+.floating-text {
+  position: fixed;
+  font-weight: bold;
+  color: #4CAF50;
+  font-size: 20px;
+  pointer-events: none;
+  animation: floatUp 1s ease-out forwards;
+  z-index: 1000;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(1.2);
+  }
+}
