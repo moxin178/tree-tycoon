@@ -2,7 +2,7 @@
   "name": "tree-tycoon",
   "version": "1.0.0",
   "description": "从砍树开始的放置经营游戏 H5 原型",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
     "test": "jest"
   },
