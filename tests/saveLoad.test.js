@@ -1,5 +1,5 @@
 const { createGameState, addGold } = require('../js/gameState');
-const { saveGame, loadGame } = require('../js/saveLoad');
+const { saveGame, loadGame, SAVE_VERSION } = require('../js/saveLoad');
 
 // 模拟 localStorage
 const mockStorage = {};
@@ -26,16 +26,14 @@ describe('saveLoad', () => {
     saveGame(state);
     const saved = JSON.parse(localStorage.getItem('treeTycoonSave'));
     expect(saved.gold).toBe(100);
+    expect(saved.saveVersion).toBe(SAVE_VERSION);
   });
 
-  test('saveGame updates lastSaveTime', () => {
+  test('saveGame does not mutate original state', () => {
     const state = createGameState();
-    const before = Date.now();
+    const originalTime = state.lastSaveTime;
     saveGame(state);
-    const after = Date.now();
-    const saved = JSON.parse(localStorage.getItem('treeTycoonSave'));
-    expect(saved.lastSaveTime).toBeGreaterThanOrEqual(before);
-    expect(saved.lastSaveTime).toBeLessThanOrEqual(after);
+    expect(state.lastSaveTime).toBe(originalTime);
   });
 
   test('loadGame restores saved state', () => {
@@ -45,6 +43,7 @@ describe('saveLoad', () => {
 
     const loaded = loadGame();
     expect(loaded.gold).toBe(100);
+    expect(loaded.saveVersion).toBe(SAVE_VERSION);
   });
 
   test('loadGame returns default state if no save', () => {
@@ -52,5 +51,12 @@ describe('saveLoad', () => {
     expect(loaded.gold).toBe(0);
     expect(loaded.wood).toBe(0);
     expect(loaded.axeLevel).toBe(1);
+  });
+
+  test('loadGame returns default state for corrupted save', () => {
+    localStorage.setItem('treeTycoonSave', 'not-valid-json');
+    const loaded = loadGame();
+    expect(loaded.gold).toBe(0);
+    expect(loaded.wood).toBe(0);
   });
 });
