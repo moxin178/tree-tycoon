@@ -22,10 +22,14 @@ export function loadGame() {
     if (typeof data.saveVersion !== 'number') {
       return createGameState();
     }
-    return {
-      ...createGameState(),
-      ...data,
-    };
+    const defaultState = createGameState();
+    const merged = { ...defaultState };
+    for (const key in data) {
+      if (data[key] !== undefined) {
+        merged[key] = data[key];
+      }
+    }
+    return merged;
   } catch (error) {
     console.warn('存档解析失败，使用默认状态', error);
     return createGameState();
