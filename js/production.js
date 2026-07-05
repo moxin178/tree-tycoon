@@ -1,16 +1,31 @@
 import { sellWood } from './upgrades.js';
 
-/**
- * 处理每秒自动生产：
- * 1. 如果拥有自动伐木机，按 axeLevel * lumberjackLevel * baseRate 产出原木
- * 2. 如果原木达到或超过背包容量，自动全部出售（不保留溢出部分）
- */
 export function processProduction(state) {
+  // 1. 自动伐木机产出原木（受上限限制）
   if (state.lumberjackLevel > 0) {
     const production = state.axeLevel * state.lumberjackLevel * state.lumberjackBaseRate;
-    state.wood += production;
+    state.wood = Math.min(state.maxWood, state.wood + production);
   }
 
+  // 2. 锯木厂加工木板
+  if (state.sawmillLevel > 0) {
+    const input = Math.min(state.wood, state.sawmillLevel);
+    const outputSpace = state.maxPlanks - state.planks;
+    const actualOutput = Math.min(input, outputSpace);
+    state.wood -= actualOutput;
+    state.planks += actualOutput;
+  }
+
+  // 3. 家具厂加工家具
+  if (state.furnitureFactoryLevel > 0) {
+    const input = Math.min(state.planks, state.furnitureFactoryLevel);
+    const outputSpace = state.maxFurniture - state.furniture;
+    const actualOutput = Math.min(input, outputSpace);
+    state.planks -= actualOutput;
+    state.furniture += actualOutput;
+  }
+
+  // 4. 背包满自动出售原木
   if (state.wood >= state.backpackCapacity) {
     sellWood(state);
   }
