@@ -1,7 +1,8 @@
 import { loadGame, saveGame } from './saveLoad.js';
 import { chopWood } from './clicker.js';
-import { sellWood, upgradeAxe } from './upgrades.js';
+import { sellWood, upgradeAxe, buyLumberjack, upgradeLumberjack, upgradeBackpack } from './upgrades.js';
 import { calculateOfflineReward } from './offlineCalc.js';
+import { processProduction } from './production.js';
 import { updateUI, showMessage, showFloatingText } from './ui.js';
 
 let state = loadGame();
@@ -62,6 +63,38 @@ document.getElementById('upgrade-btn').addEventListener('click', () => {
   }
   updateUI(state);
 });
+
+document.getElementById('buy-lumberjack-btn').addEventListener('click', () => {
+  const isOwned = state.lumberjackLevel > 0;
+  const result = isOwned ? upgradeLumberjack(state) : buyLumberjack(state);
+  if (result.success) {
+    const message = isOwned
+      ? `自动伐木机升级到等级 ${state.lumberjackLevel}`
+      : '购买自动伐木机成功';
+    showMessage(message);
+    saveGame(state);
+  } else {
+    showMessage(result.reason);
+  }
+  updateUI(state);
+});
+
+document.getElementById('upgrade-backpack-btn').addEventListener('click', () => {
+  const result = upgradeBackpack(state);
+  if (result.success) {
+    showMessage(`背包容量提升到 ${state.backpackCapacity}`);
+    saveGame(state);
+  } else {
+    showMessage(result.reason);
+  }
+  updateUI(state);
+});
+
+// 每秒生产循环
+setInterval(() => {
+  processProduction(state);
+  updateUI(state);
+}, 1000);
 
 // 自动保存
 setInterval(() => {
