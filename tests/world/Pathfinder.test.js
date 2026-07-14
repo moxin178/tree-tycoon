@@ -19,7 +19,7 @@ describe('Pathfinder', () => {
     world.setTile(1, 2, TileType.BUILDING);
     const path = Pathfinder.findPath(world, { x: 0, y: 0 }, { x: 2, y: 0 });
     expect(path).not.toBeNull();
-    expect(path.every(p => world.isWalkable(p.x, p.y))).toBe(true);
+    expect(path.some(p => p.x === 1 && (p.y === 0 || p.y === 1 || p.y === 2))).toBe(false);
   });
 
   test('returns null when no path', () => {
