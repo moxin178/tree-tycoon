@@ -1,3 +1,4 @@
+import { Worker } from '../entities/Worker.js';
 import { WorkerAI } from './WorkerAI.js';
 
 export class EntityManager {
@@ -23,7 +24,9 @@ export class EntityManager {
 
   update(dt, context) {
     for (const entity of this.entities.values()) {
-      if (entity.constructor.name === 'Worker') {
+      if (typeof entity.update === 'function') {
+        entity.update(dt, context);
+      } else if (entity instanceof Worker) {
         WorkerAI.update(entity, dt, context);
       }
     }

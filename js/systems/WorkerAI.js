@@ -48,6 +48,11 @@ export class WorkerAI {
   }
 
   static setTarget(worker, targetX, targetY, context) {
+    if (!context?.world) {
+      worker.state = WorkerState.IDLE;
+      return;
+    }
+
     const start = {
       x: Math.floor(worker.x / TILE_SIZE),
       y: Math.floor(worker.y / TILE_SIZE),
@@ -75,7 +80,7 @@ export class WorkerAI {
     const dist = Math.sqrt(dx * dx + dy * dy);
     const moveDist = worker.speed * TILE_SIZE * dt;
 
-    if (dist <= moveDist) {
+    if (dist < Number.EPSILON || dist <= moveDist) {
       worker.x = targetX;
       worker.y = targetY;
       worker.pathIndex++;
