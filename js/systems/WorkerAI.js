@@ -1,3 +1,6 @@
+import { Pathfinder } from '../world/Pathfinder.js';
+import { TILE_SIZE } from '../game/Config.js';
+
 export const WorkerState = {
   IDLE: 'idle',
   MOVING: 'moving',
@@ -44,8 +47,45 @@ export class WorkerAI {
     }
   }
 
+  static setTarget(worker, targetX, targetY, context) {
+    const start = {
+      x: Math.floor(worker.x / TILE_SIZE),
+      y: Math.floor(worker.y / TILE_SIZE),
+    };
+    const end = { x: targetX, y: targetY };
+    worker.path = Pathfinder.findPath(context.world, start, end);
+    if (worker.path && worker.path.length > 0) {
+      worker.state = WorkerState.MOVING;
+      worker.pathIndex = 0;
+    }
+  }
+
   static move(worker, dt, context) {
-    // Movement implementation in next task
+    if (!worker.path || worker.pathIndex >= worker.path.length) {
+      worker.state = WorkerState.IDLE;
+      return;
+    }
+
+    const targetTile = worker.path[worker.pathIndex];
+    const targetX = targetTile.x * TILE_SIZE + TILE_SIZE / 2;
+    const targetY = targetTile.y * TILE_SIZE + TILE_SIZE / 2;
+
+    const dx = targetX - worker.x;
+    const dy = targetY - worker.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const moveDist = worker.speed * TILE_SIZE * dt;
+
+    if (dist <= moveDist) {
+      worker.x = targetX;
+      worker.y = targetY;
+      worker.pathIndex++;
+      if (worker.pathIndex >= worker.path.length) {
+        worker.state = WorkerState.IDLE;
+      }
+    } else {
+      worker.x += (dx / dist) * moveDist;
+      worker.y += (dy / dist) * moveDist;
+    }
   }
 
   static work(worker, dt, context) {
