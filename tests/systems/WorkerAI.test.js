@@ -57,4 +57,33 @@ describe('WorkerAI', () => {
     WorkerAI.update(worker, 0.1, context);
     expect(worker.state).toBe('idle');
   });
+
+  test('race condition: two workers do not consume wood below zero', () => {
+    const sawmill = new Sawmill(2, 2);
+    sawmill.addInput('wood', 1);
+
+    const worker1 = new Worker(0, 0, WorkerQuality.COMMON);
+    worker1.assignedBuildingId = sawmill.id;
+    const worker2 = new Worker(0, 0, WorkerQuality.COMMON);
+    worker2.assignedBuildingId = sawmill.id;
+
+    const context = {
+      buildings: [sawmill],
+      world: {},
+      entityManager: {},
+    };
+
+    // Move both workers into the working state
+    WorkerAI.update(worker1, 0.1, context);
+    WorkerAI.update(worker2, 0.1, context);
+
+    // Advance both until the single wood is consumed
+    for (let i = 0; i < 20; i++) {
+      WorkerAI.update(worker1, 0.1, context);
+      WorkerAI.update(worker2, 0.1, context);
+      if (sawmill.inputInventory.wood === 0) break;
+    }
+
+    expect(sawmill.inputInventory.wood).toBe(0);
+  });
 });

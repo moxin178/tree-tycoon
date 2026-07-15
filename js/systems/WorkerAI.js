@@ -50,12 +50,18 @@ export class WorkerAI {
   static work(worker, dt, context) {
     const building = context.buildings.find(b => b.id === worker.assignedBuildingId);
     if (!building || building.inputInventory.wood < 1) {
+      worker.workProgress = 0;
       worker.state = WorkerState.IDLE;
       return;
     }
 
     worker.workProgress += dt * worker.efficiency;
     if (worker.workProgress >= 1) {
+      if (building.inputInventory.wood < 1) {
+        worker.workProgress = 0;
+        worker.state = WorkerState.IDLE;
+        return;
+      }
       building.inputInventory.wood -= 1;
       building.addOutput('planks', 1);
       worker.workProgress = 0;
