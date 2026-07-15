@@ -26,6 +26,8 @@ export class BuildingValidator {
     for (let dy = -1; dy <= BUILDING_HEIGHT; dy++) {
       for (let dx = -1; dx <= BUILDING_WIDTH; dx++) {
         if (dx >= 0 && dx < BUILDING_WIDTH && dy >= 0 && dy < BUILDING_HEIGHT) continue;
+        // 只检查四边相邻的地块，跳过对角角落
+        if ((dx === -1 || dx === BUILDING_WIDTH) && (dy === -1 || dy === BUILDING_HEIGHT)) continue;
         const tile = world.getTile(x + dx, y + dy);
         if (tile && tile.type === TileType.ROAD) return true;
       }
