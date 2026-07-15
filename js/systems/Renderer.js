@@ -21,11 +21,15 @@ export class Renderer {
   }
 
   renderTiles(ctx, world, camera) {
-    for (let y = 0; y < world.height; y++) {
-      for (let x = 0; x < world.width; x++) {
+    const startX = Math.floor(camera.x / TILE_SIZE);
+    const startY = Math.floor(camera.y / TILE_SIZE);
+    const endX = startX + Math.ceil(camera.viewWidth / TILE_SIZE) + 1;
+    const endY = startY + Math.ceil(camera.viewHeight / TILE_SIZE) + 1;
+
+    for (let y = Math.max(0, startY); y < Math.min(world.height, endY); y++) {
+      for (let x = Math.max(0, startX); x < Math.min(world.width, endX); x++) {
         const tile = world.getTile(x, y);
         const screen = camera.worldToScreen(x * TILE_SIZE, y * TILE_SIZE);
-
         ctx.fillStyle = this.colors[tile.type];
         ctx.fillRect(screen.x, screen.y, TILE_SIZE, TILE_SIZE);
 
