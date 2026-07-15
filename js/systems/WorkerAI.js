@@ -37,14 +37,64 @@ export class WorkerAI {
       return;
     }
 
-    // Simple behavior: sawmill worker takes wood from input and processes
-    if (building.type === 'sawmill' && building.inputInventory.wood > 0) {
-      worker.target = { x: building.x, y: building.y };
-      worker.state = WorkerState.WORKING;
-      worker.workProgress = 0;
-    } else {
-      worker.state = WorkerState.IDLE;
+    switch (building.type) {
+      case 'forestZone':
+        // Forest zone will be fully implemented in Task 21
+        worker.state = WorkerState.IDLE;
+        break;
+
+      case 'sawmill':
+        if (building.inputInventory.wood > 0) {
+          worker.state = WorkerState.WORKING;
+          worker.workProgress = 0;
+        } else if (building.outputInventory.planks > 0) {
+          worker.carrying = {
+            type: 'planks',
+            amount: Math.min(worker.capacity, building.outputInventory.planks),
+          };
+          building.outputInventory.planks -= worker.carrying.amount;
+          worker.state = WorkerState.CARRYING;
+          worker.targetBuilding = this.findNearestBuilding(buildings, building, ['furnitureFactory', 'warehouse']);
+        } else {
+          worker.state = WorkerState.IDLE;
+        }
+        break;
+
+      case 'furnitureFactory':
+        if (building.inputInventory.planks > 0) {
+          worker.state = WorkerState.WORKING;
+          worker.workProgress = 0;
+        } else if (building.outputInventory.furniture > 0) {
+          worker.carrying = {
+            type: 'furniture',
+            amount: Math.min(worker.capacity, building.outputInventory.furniture),
+          };
+          building.outputInventory.furniture -= worker.carrying.amount;
+          worker.state = WorkerState.CARRYING;
+          worker.targetBuilding = this.findNearestBuilding(buildings, building, ['warehouse']);
+        } else {
+          worker.state = WorkerState.IDLE;
+        }
+        break;
+
+      case 'warehouse':
+        worker.state = WorkerState.IDLE;
+        break;
+
+      default:
+        worker.state = WorkerState.IDLE;
+        break;
     }
+  }
+
+  static findNearestBuilding(buildings, from, types) {
+    return buildings
+      .filter(b => types.includes(b.type))
+      .sort((a, b) => {
+        const da = Math.hypot(a.x - from.x, a.y - from.y);
+        const db = Math.hypot(b.x - from.x, b.y - from.y);
+        return da - db;
+      })[0] || null;
   }
 
   static setTarget(worker, targetX, targetY, context) {

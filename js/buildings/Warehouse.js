@@ -12,4 +12,14 @@ export class Warehouse extends Building {
       this.getInventoryCapacity()
     );
   }
+
+  addResource(type, amount) {
+    this.addStorage(type, amount);
+  }
+
+  takeResource(type, amount) {
+    const actual = Math.min(this.storage[type], amount);
+    this.storage[type] -= actual;
+    return actual;
+  }
 }
