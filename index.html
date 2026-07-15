@@ -7,79 +7,23 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="game-container">
-    <header>
-      <h1>🌲 从砍树开始</h1>
-      <p>从一把斧头开始，打造你的商业帝国</p>
-    </header>
-
-    <section class="stats">
-      <div class="stat">
-        <span class="label">💰 金币</span>
-        <span id="gold-display">0</span>
-      </div>
-      <div class="stat">
-        <span class="label">🪵 原木</span>
-        <span id="wood-display">0</span>
-      </div>
-      <div class="stat">
-        <span class="label">🪓 斧头等级</span>
-        <span id="axe-display">1</span>
-      </div>
-      <div class="stat">
-        <span class="label">🪵 木板</span>
-        <span id="planks-display">0</span>
-      </div>
-      <div class="stat">
-        <span class="label">🛋️ 家具</span>
-        <span id="furniture-display">0</span>
-      </div>
-      <div class="stat">
-        <span class="label">🤖 伐木机</span>
-        <span id="lumberjack-display">未购买</span>
-      </div>
-      <div class="stat">
-        <span class="label">📦 库存上限</span>
-        <span id="storage-display">10/10/10</span>
-      </div>
-      <div class="stat">
-        <span class="label">🎒 背包</span>
-        <span id="backpack-display">10</span>
-      </div>
-    </section>
-
-    <section class="game-area">
-      <div class="tree-wrapper">
-        <div class="tree" id="tree">🌲</div>
-      </div>
-      <button id="chop-btn" class="big-btn">砍树</button>
-    </section>
-
-    <section class="actions">
-      <button id="sell-btn" class="action-btn">出售原木</button>
-      <button id="sell-planks-btn" class="action-btn">出售木板</button>
-      <button id="sell-furniture-btn" class="action-btn">出售家具</button>
-      <button id="upgrade-btn" class="action-btn">升级斧头 (<span id="upgrade-cost">5</span> 金币)</button>
-      <button id="buy-lumberjack-btn" class="action-btn">
-        购买自动伐木机 (<span id="lumberjack-cost">50</span> 金币)
-      </button>
-      <button id="buy-sawmill-btn" class="action-btn">
-        建造锯木厂 (<span id="sawmill-cost">100</span> 金币)
-      </button>
-      <button id="buy-furniture-factory-btn" class="action-btn">
-        建造家具厂 (<span id="furniture-factory-cost">500</span> 金币)
-      </button>
-      <button id="upgrade-backpack-btn" class="action-btn">
-        升级背包 (<span id="backpack-cost">30</span> 金币)
-      </button>
-      <button id="upgrade-storage-btn" class="action-btn">
-        升级仓库 (<span id="storage-cost">50</span> 金币)
-      </button>
-    </section>
-
-    <section class="message" id="message"></section>
+  <div id="game-ui">
+    <div id="resource-bar">
+      <span>💰 <span id="gold">0</span></span>
+      <span>💎 <span id="diamonds">0</span></span>
+      <span>🪵 <span id="wood">0</span></span>
+      <span>🪵 <span id="planks">0</span></span>
+      <span>🛋️ <span id="furniture">0</span></span>
+      <span>👷 <span id="workers">0/0</span></span>
+    </div>
+    <div id="panel" class="hidden">
+      <h3 id="panel-title"></h3>
+      <div id="panel-content"></div>
+      <button id="panel-close">关闭</button>
+    </div>
+    <div id="notification-area"></div>
   </div>
-
+  <canvas id="game-canvas" width="800" height="600"></canvas>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

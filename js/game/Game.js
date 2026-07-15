@@ -6,6 +6,7 @@ import { EntityManager } from '../systems/EntityManager.js';
 import { Renderer } from '../systems/Renderer.js';
 import { InputManager } from '../input/InputManager.js';
 import { Economy } from '../systems/Economy.js';
+import { UIManager } from '../ui/UIManager.js';
 import { TruckSystem } from '../systems/TruckSystem.js';
 import { TILE_SIZE, MAP_WIDTH, MAP_HEIGHT } from './Config.js';
 import { BuildingValidator } from '../buildings/BuildingValidator.js';
@@ -34,6 +35,7 @@ export class Game {
     this.renderer = new Renderer();
     this.truckSystem = new TruckSystem();
     this.inputManager = new InputManager(this.camera, canvas);
+    this.uiManager = new UIManager(this);
 
     this.boss = new Boss(10 * TILE_SIZE, 10 * TILE_SIZE);
     this.entityManager.add(this.boss);
@@ -74,6 +76,7 @@ export class Game {
 
     this.camera.update(this.boss, dt);
     this.entityManager.update(dt, context);
+    this.uiManager.updateResourceBar();
 
     const parkingLot = this.buildings.find(b => b.type === 'parkingLot');
     if (parkingLot) {
