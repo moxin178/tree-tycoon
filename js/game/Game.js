@@ -7,6 +7,8 @@ import { Renderer } from '../systems/Renderer.js';
 import { InputManager } from '../input/InputManager.js';
 import { Economy } from '../systems/Economy.js';
 import { UIManager } from '../ui/UIManager.js';
+import { BuildingPanel } from '../ui/BuildingPanel.js';
+import { BuildMenu } from '../ui/BuildMenu.js';
 import { TruckSystem } from '../systems/TruckSystem.js';
 import { TILE_SIZE, MAP_WIDTH, MAP_HEIGHT } from './Config.js';
 import { BuildingValidator } from '../buildings/BuildingValidator.js';
@@ -36,6 +38,7 @@ export class Game {
     this.truckSystem = new TruckSystem();
     this.inputManager = new InputManager(this.camera, canvas);
     this.uiManager = new UIManager(this);
+    this.selectedBuildType = null;
 
     this.boss = new Boss(10 * TILE_SIZE, 10 * TILE_SIZE);
     this.entityManager.add(this.boss);
@@ -95,10 +98,53 @@ export class Game {
   }
 
   handleWorldClick(worldPos) {
-    // Placeholder: will be wired to UI in later tasks
     const tx = Math.floor(worldPos.x / TILE_SIZE);
     const ty = Math.floor(worldPos.y / TILE_SIZE);
-    console.log('Clicked tile:', tx, ty);
+
+    const clickedBuilding = this.buildings.find(b =>
+      tx >= b.x && tx < b.x + b.width &&
+      ty >= b.y && ty < b.y + b.height
+    );
+
+    if (clickedBuilding) {
+      this.uiManager.showPanel(
+        clickedBuilding.type,
+        BuildingPanel.render(clickedBuilding)
+      );
+      return;
+    }
+
+    if (this.selectedBuildType) {
+      const result = this.buildBuilding(this.selectedBuildType, tx, ty);
+      if (result.valid) {
+        this.uiManager.showNotification('建造成功');
+        this.selectedBuildType = null;
+      } else {
+        this.uiManager.showNotification(result.reason);
+      }
+      return;
+    }
+
+    // Move boss
+    this.boss.moveTo(worldPos.x, worldPos.y);
+  }
+
+  selectBuildType(type) {
+    this.selectedBuildType = type;
+    this.uiManager.hidePanel();
+    this.uiManager.showNotification(`已选择建造：${type}`);
+  }
+
+  upgradeBuilding(buildingId) {
+    const building = this.buildings.find(b => b.id === buildingId);
+    if (!building) return;
+    const cost = BuildingPanel.getUpgradeCost(building);
+    if (this.economy.spendGold(cost)) {
+      building.upgrade();
+      this.uiManager.showNotification(`${building.type} 升级到 Lv.${building.level}`);
+    } else {
+      this.uiManager.showNotification('金币不足');
+    }
   }
 
   buildBuilding(type, x, y) {

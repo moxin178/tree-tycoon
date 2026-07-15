@@ -1,3 +1,5 @@
+import { BuildMenu } from './BuildMenu.js';
+
 export class UIManager {
   constructor(game) {
     this.game = game;
@@ -8,6 +10,13 @@ export class UIManager {
 
     if (this.panelClose) {
       this.panelClose.addEventListener('click', () => this.hidePanel());
+    }
+
+    const buildBtn = this.getElement('build-btn');
+    if (buildBtn) {
+      buildBtn.addEventListener('click', () => {
+        this.showPanel('建造', BuildMenu.render());
+      });
     }
   }
 
