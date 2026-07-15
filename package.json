@@ -12,6 +12,7 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "jest": "^30.4.2",
     "jsdom": "^29.1.1",
     "playwright": "^1.61.1"

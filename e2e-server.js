@@ -2,7 +2,7 @@ import { createServer } from 'http';
 import { readFile } from 'fs/promises';
 import { extname, join } from 'path';
 
-const PORT = 8080;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 8765;
 const ROOT = process.cwd();
 
 const MIME = {
