@@ -85,5 +85,6 @@ describe('WorkerAI', () => {
     }
 
     expect(sawmill.inputInventory.wood).toBe(0);
+    expect(sawmill.outputInventory.planks).toBe(1);
   });
 });

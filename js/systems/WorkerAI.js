@@ -27,7 +27,8 @@ export class WorkerAI {
   }
 
   static findTask(worker, context) {
-    const building = context.buildings.find(b => b.id === worker.assignedBuildingId);
+    const buildings = Array.isArray(context?.buildings) ? context.buildings : [];
+    const building = buildings.find(b => b.id === worker.assignedBuildingId);
     if (!building) {
       worker.state = WorkerState.IDLE;
       return;
@@ -48,7 +49,8 @@ export class WorkerAI {
   }
 
   static work(worker, dt, context) {
-    const building = context.buildings.find(b => b.id === worker.assignedBuildingId);
+    const buildings = Array.isArray(context?.buildings) ? context.buildings : [];
+    const building = buildings.find(b => b.id === worker.assignedBuildingId);
     if (!building || building.inputInventory.wood < 1) {
       worker.workProgress = 0;
       worker.state = WorkerState.IDLE;
