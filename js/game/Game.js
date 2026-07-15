@@ -196,4 +196,31 @@ export class Game {
 
     return { success: true, worker };
   }
+
+  getState() {
+    return {
+      saveVersion: 4,
+      gold: this.economy.gold,
+      diamonds: this.economy.diamonds,
+      world: this.world,
+      buildings: this.buildings,
+      boss: { x: this.boss.x, y: this.boss.y },
+      camera: { x: this.camera.x, y: this.camera.y },
+      lastSaveTime: Date.now(),
+    };
+  }
+
+  loadState(state) {
+    this.economy.gold = state.gold || 0;
+    this.economy.diamonds = state.diamonds || 0;
+    if (state.boss) {
+      this.boss.x = state.boss.x;
+      this.boss.y = state.boss.y;
+    }
+    if (state.camera) {
+      this.camera.x = state.camera.x;
+      this.camera.y = state.camera.y;
+    }
+    // World and buildings serialization will be implemented in next task
+  }
 }
