@@ -24,7 +24,7 @@ const QUALITY_STATS = {
 export class Worker extends Entity {
   constructor(x, y, quality = WorkerQuality.COMMON) {
     super(x, y);
-    this.quality = quality;
+    this.quality = QUALITY_ORDER.includes(quality) ? quality : WorkerQuality.COMMON;
     this.assignedBuildingId = null;
     this.state = 'idle';
     this.carrying = { type: null, amount: 0 };
