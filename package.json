@@ -4,13 +4,17 @@
   "description": "从砍树开始的放置经营游戏 H5 原型",
   "main": "index.html",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/.bin/jest"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test:e2e": "npx playwright test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "devDependencies": {
-    "jest": "^30.4.2"
+    "@playwright/test": "^1.61.1",
+    "jest": "^30.4.2",
+    "jsdom": "^29.1.1",
+    "playwright": "^1.61.1"
   }
 }
