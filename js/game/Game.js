@@ -9,6 +9,7 @@ import { Economy } from '../systems/Economy.js';
 import { UIManager } from '../ui/UIManager.js';
 import { BuildingPanel } from '../ui/BuildingPanel.js';
 import { BuildMenu } from '../ui/BuildMenu.js';
+import { Serializer } from '../save/Serializer.js';
 import { TruckSystem } from '../systems/TruckSystem.js';
 import { TILE_SIZE, MAP_WIDTH, MAP_HEIGHT } from './Config.js';
 import { BuildingValidator } from '../buildings/BuildingValidator.js';
@@ -202,8 +203,8 @@ export class Game {
       saveVersion: 4,
       gold: this.economy.gold,
       diamonds: this.economy.diamonds,
-      world: this.world,
-      buildings: this.buildings,
+      world: Serializer.serializeWorld(this.world),
+      buildings: this.buildings.map(Serializer.serializeBuilding),
       boss: { x: this.boss.x, y: this.boss.y },
       camera: { x: this.camera.x, y: this.camera.y },
       lastSaveTime: Date.now(),
@@ -213,14 +214,23 @@ export class Game {
   loadState(state) {
     this.economy.gold = state.gold || 0;
     this.economy.diamonds = state.diamonds || 0;
+
+    if (state.world) {
+      this.world = Serializer.deserializeWorld(state.world);
+    }
+
+    if (state.buildings) {
+      this.buildings = state.buildings.map(Serializer.deserializeBuilding).filter(Boolean);
+    }
+
     if (state.boss) {
       this.boss.x = state.boss.x;
       this.boss.y = state.boss.y;
     }
+
     if (state.camera) {
       this.camera.x = state.camera.x;
       this.camera.y = state.camera.y;
     }
-    // World and buildings serialization will be implemented in next task
   }
 }
