@@ -35,7 +35,7 @@ describe('WorkerAI', () => {
 
     worker.efficiency = 1;
     worker.state = 'working';
-    worker.workProgress = 0;
+    worker.workProgress = 1; // sawmill.processTime is 2
 
     WorkerAI.update(worker, 1, context);
 

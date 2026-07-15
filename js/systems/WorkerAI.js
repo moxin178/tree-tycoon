@@ -151,27 +151,62 @@ export class WorkerAI {
   static work(worker, dt, context) {
     const buildings = Array.isArray(context?.buildings) ? context.buildings : [];
     const building = buildings.find(b => b.id === worker.assignedBuildingId);
-    if (!building || building.inputInventory.wood < 1) {
-      worker.workProgress = 0;
+    if (!building) {
       worker.state = WorkerState.IDLE;
       return;
     }
 
     worker.workProgress += dt * worker.efficiency;
-    if (worker.workProgress >= 1) {
-      if (building.inputInventory.wood < 1) {
-        worker.workProgress = 0;
-        worker.state = WorkerState.IDLE;
-        return;
+    if (worker.workProgress >= building.processTime) {
+      if (building.type === 'sawmill' && building.inputInventory.wood > 0) {
+        building.inputInventory.wood -= 1;
+        building.addOutput('planks', 1);
+      } else if (building.type === 'furnitureFactory' && building.inputInventory.planks > 0) {
+        building.inputInventory.planks -= 1;
+        building.addOutput('furniture', 1);
       }
-      building.inputInventory.wood -= 1;
-      building.addOutput('planks', 1);
       worker.workProgress = 0;
       worker.state = WorkerState.IDLE;
     }
   }
 
   static carry(worker, dt, context) {
-    // Carry implementation in next task
+    const target = worker.targetBuilding;
+    if (!target) {
+      worker.state = WorkerState.IDLE;
+      return;
+    }
+
+    const targetX = target.x * TILE_SIZE + TILE_SIZE / 2;
+    const targetY = target.y * TILE_SIZE + TILE_SIZE / 2;
+    const dist = Math.hypot(targetX - worker.x, targetY - worker.y);
+
+    if (dist < 5) {
+      // Deliver
+      if (worker.carrying.type === 'wood') {
+        if (target.type === 'sawmill') {
+          target.addInput('wood', worker.carrying.amount);
+        } else if (target.type === 'warehouse') {
+          target.addResource('wood', worker.carrying.amount);
+        }
+      } else if (worker.carrying.type === 'planks') {
+        if (target.type === 'furnitureFactory') {
+          target.addInput('planks', worker.carrying.amount);
+        } else if (target.type === 'warehouse') {
+          target.addResource('planks', worker.carrying.amount);
+        }
+      } else if (worker.carrying.type === 'furniture') {
+        if (target.type === 'warehouse') {
+          target.addResource('furniture', worker.carrying.amount);
+        }
+      }
+
+      worker.carrying = { type: null, amount: 0 };
+      worker.state = WorkerState.IDLE;
+    } else {
+      const speed = worker.speed * TILE_SIZE * dt;
+      worker.x += ((targetX - worker.x) / dist) * speed;
+      worker.y += ((targetY - worker.y) / dist) * speed;
+    }
   }
 }
