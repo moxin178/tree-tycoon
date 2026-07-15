@@ -38,10 +38,17 @@ export class WorkerAI {
     }
 
     switch (building.type) {
-      case 'forestZone':
-        // Forest zone will be fully implemented in Task 21
-        worker.state = WorkerState.IDLE;
+      case 'forestZone': {
+        const harvested = building.harvest(worker.capacity);
+        if (harvested > 0) {
+          worker.carrying = { type: 'wood', amount: harvested };
+          worker.state = WorkerState.CARRYING;
+          worker.targetBuilding = this.findNearestBuilding(buildings, building, ['sawmill', 'warehouse']);
+        } else {
+          worker.state = WorkerState.IDLE;
+        }
         break;
+      }
 
       case 'sawmill':
         if (building.inputInventory.wood > 0) {

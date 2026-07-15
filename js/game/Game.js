@@ -32,7 +32,7 @@ export class Game {
     this.economy = new Economy();
     this.economy.addGold(200); // Starting gold
 
-    this.buildings = [];
+    this.buildings = MapGenerator.createForestBuildings(this.world);
     this.entityManager = new EntityManager();
     this.renderer = new Renderer();
     this.truckSystem = new TruckSystem();
@@ -80,6 +80,12 @@ export class Game {
     this.camera.update(this.boss, dt);
     this.entityManager.update(dt, context);
     this.uiManager.updateResourceBar();
+
+    for (const building of this.buildings) {
+      if (building.type === 'forestZone' && building.update) {
+        building.update(dt);
+      }
+    }
 
     const parkingLot = this.buildings.find(b => b.type === 'parkingLot');
     if (parkingLot) {

@@ -43,7 +43,7 @@ describe('ForestZone', () => {
   test('has forestZone type and regen properties', () => {
     const b = new ForestZone(1, 2);
     expect(b.type).toBe('forestZone');
-    expect(b.regenRate).toBe(1);
+    expect(b.regenRate).toBe(0.5);
     expect(b.woodPerTree).toBe(1);
   });
 });

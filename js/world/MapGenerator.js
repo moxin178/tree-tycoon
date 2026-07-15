@@ -1,3 +1,4 @@
+import { ForestZone } from '../buildings/ForestZone.js';
 import { TileType } from './Tile.js';
 
 export class MapGenerator {
@@ -14,5 +15,16 @@ export class MapGenerator {
         }
       }
     }
+  }
+
+  static createForestBuildings(world) {
+    // Create forest zone buildings around edges
+    // Simplified: one big forest zone per edge
+    return [
+      new ForestZone(0, 0, world.width, 2),
+      new ForestZone(0, world.height - 2, world.width, 2),
+      new ForestZone(0, 2, 2, world.height - 4),
+      new ForestZone(world.width - 2, 2, 2, world.height - 4),
+    ];
   }
 }
