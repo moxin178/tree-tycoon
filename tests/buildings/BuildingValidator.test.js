@@ -3,9 +3,9 @@ import { World } from '../../js/world/World.js';
 import { TileType } from '../../js/world/Tile.js';
 
 describe('BuildingValidator', () => {
-  test('allows placement on empty tiles adjacent to road', () => {
+  test('allows placement on empty tiles adjacent to road connected to edge', () => {
     const world = new World(10, 10);
-    world.setTile(2, 3, TileType.ROAD);
+    for (let y = 3; y < 10; y++) world.setTile(2, y, TileType.ROAD);
     const result = BuildingValidator.canPlace(world, 2, 0);
     expect(result.valid).toBe(true);
   });
