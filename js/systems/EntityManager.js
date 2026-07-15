@@ -1,12 +1,12 @@
-import { Worker } from '../entities/Worker.js';
-import { WorkerAI } from './WorkerAI.js';
-
 export class EntityManager {
   constructor() {
     this.entities = new Map();
   }
 
   add(entity) {
+    if (!entity.id) {
+      throw new Error('Entity must have an id');
+    }
     this.entities.set(entity.id, entity);
   }
 
@@ -26,8 +26,6 @@ export class EntityManager {
     for (const entity of this.entities.values()) {
       if (typeof entity.update === 'function') {
         entity.update(dt, context);
-      } else if (entity instanceof Worker) {
-        WorkerAI.update(entity, dt, context);
       }
     }
   }

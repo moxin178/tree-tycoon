@@ -66,6 +66,11 @@ export class WorkerAI {
   }
 
   static move(worker, dt, context) {
+    if (typeof worker.speed !== 'number' || worker.speed <= 0 || Number.isNaN(worker.speed)) {
+      worker.state = WorkerState.IDLE;
+      return;
+    }
+
     if (!worker.path || worker.pathIndex >= worker.path.length) {
       worker.state = WorkerState.IDLE;
       return;

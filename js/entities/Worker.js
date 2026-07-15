@@ -1,4 +1,5 @@
 import { Entity } from './Entity.js';
+import { WorkerAI } from '../systems/WorkerAI.js';
 
 export const WorkerQuality = {
   COMMON: 'common',
@@ -46,5 +47,9 @@ export class Worker extends Entity {
       return true;
     }
     return false;
+  }
+
+  update(dt, context) {
+    WorkerAI.update(this, dt, context);
   }
 }
